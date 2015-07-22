@@ -1,0 +1,47 @@
+{
+"apiVersion": "v1",
+"kind": "Pod",
+"metadata": {"name":"k8s-master"},
+"spec":{
+"hostNetwork": true,
+"containers":[
+    {
+      "name": "controller-manager",
+      "image": "dalanlan/hyperkube:v1.0.0",
+      "command": [
+              "/hyperkube",
+              "controller-manager",
+              "--master=https://127.0.0.1:6443",
+              "--root-ca-file=/srv/kubernetes/ca.crt",
+              "--service-account-private-key-file=/srv/kubernetes/server.key",
+              "--kubeconfig=/srv/kubernetes/config"
+        ]
+    },
+    {
+      "name": "apiserver",
+      "image": "dalanlan/hyperkube:v1.0.0",
+      "command": [
+              "/hyperkube",
+              "apiserver",
+              "--etcd-servers=http://127.0.0.1:4001",
+              "--cluster-name=kubernetes",
+              "--service-cluster-ip-range=192.168.3.0/24",
+              "--client-ca-file=/srv/kubernetes/ca.crt",
+              "--tls-cert-file=/srv/kubernetes/server.cert",
+              "--tls-private-key-file=/srv/kubernetes/server.key",
+              "--admission_control=NamespaceLifecycle,NamespaceAutoProvision,LimitRanger,ServiceAccount,ResourceQuota"
+        ]
+    },
+    {
+      "name": "scheduler",
+      "image": "dalanlan/hyperkube:v1.0.0",
+      "command": [
+              "/hyperkube",
+              "scheduler",
+              "--master=https://127.0.0.1:6443",
+              "--kubeconfig=/srv/kubernetes/config"
+        ]
+    }
+  ] 
+ }
+}
