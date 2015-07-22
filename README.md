@@ -105,5 +105,4 @@ kubectl describe <pod-id>
 
 14 deploy Cadvisor
 
-15 Need to cover all of the details of kube2sky
-<build a new image every time>
+

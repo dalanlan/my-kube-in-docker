@@ -198,9 +198,9 @@ var DnsSeConfig = `
 
 `
 
-/*var ApmRcConfig = `{
+var ApmRcConfig = `{
     "kind": "ReplicationController",
-    "apiVersion": "v1beta3",
+    "apiVersion": "v1",
     "metadata": {
         "name": "apm",
         "namespace": "default",
@@ -223,7 +223,7 @@ var DnsSeConfig = `
                 "containers": [
                     {
                         "name": "apm",
-                        "image": "xufei/apm-dc-master:v1",
+                        "image": "liuyang/apm-dc-master:v1",
                         "ports": [
                             {
                                 "containerPort": 6669,
@@ -239,7 +239,7 @@ var DnsSeConfig = `
 
 var ApmSeConfig = `{
     "kind": "Service",
-    "apiVersion": "v1beta3",
+    "apiVersion": "v1",
     "metadata": {
         "name": "apm",
         "namespace": "default",
@@ -260,7 +260,7 @@ var ApmSeConfig = `{
         }
     }
 }`
-*/
+
 func main() {
 	/*	loadScript := `loadpkg(){
 			#load the file
