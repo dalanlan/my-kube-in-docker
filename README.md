@@ -80,15 +80,6 @@ Do we need this? Not really, we could delete it as far as i could see.
 8 Cadvisor issue (warning on kubelet)
 
 9 To close 8080 of apiserver forcely.
-Seems do not have to bother. 'Cause we have
-```
-emma@emma-OptiPlex-3010:~/86-server$ kubectl get nodes
-NAME        LABELS                             STATUS
-127.0.0.1   kubernetes.io/hostname=127.0.0.1   Ready
-emma@emma-OptiPlex-3010:~/86-server$ kubectl -s 10.10.103.86:8080 get nodes
-error: couldn't read version from server: Get http://10.10.103.86:8080/api: dial tcp 10.10.103.86:8080: connection refused
-```
-Then who could reach that?
 
 10 How to figure out the pod id 
 kubectl get pod/<pod-name> -o yaml
@@ -104,5 +95,8 @@ kubectl describe <pod-id>
 13 manage images in a sorted way
 
 14 deploy Cadvisor
+build a new hyperkube binary to let it be non-static one.
 
+
+15 An interesting example of service
 

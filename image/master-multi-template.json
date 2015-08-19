@@ -7,7 +7,7 @@
 "containers":[
     {
       "name": "controller-manager",
-      "image": "dalanlan/hyperkube:VERSION",
+      "image": "REPO/hyperkube:VERSION",
       "command": [
               "/hyperkube",
               "controller-manager",
@@ -19,7 +19,7 @@
     },
     {
       "name": "apiserver",
-      "image": "dalanlan/hyperkube:VERSION",
+      "image": "REPO/hyperkube:VERSION",
       "command": [
               "/hyperkube",
               "apiserver",
@@ -29,12 +29,12 @@
               "--client-ca-file=/srv/kubernetes/ca.crt",
               "--tls-cert-file=/srv/kubernetes/server.cert",
               "--tls-private-key-file=/srv/kubernetes/server.key",
-              "--admission_control=NamespaceLifecycle,NamespaceAutoProvision,LimitRanger,ServiceAccount,ResourceQuota"
+              "--admission-control=NamespaceLifecycle,NamespaceAutoProvision,LimitRanger,ServiceAccount,ResourceQuota"
         ]
     },
     {
       "name": "scheduler",
-      "image": "dalanlan/hyperkube:VERSION",
+      "image": "REPO/hyperkube:VERSION",
       "command": [
               "/hyperkube",
               "scheduler",

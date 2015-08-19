@@ -6,7 +6,7 @@ kubectl --namespace=kube-system get rc
 kubectl --namespace=kube-system get se
 
 kubectl create -f busybox.yaml 
-sleep 100
+sleep 50
 kubectl get pods --all-namespaces
 kubectl exec busybox -- nslookup kubernetes
 

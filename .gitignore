@@ -1,4 +1,5 @@
 #cert
 image/kubernetes
-image/*.tar
+image/*.tar*
 tarpackage
+image/hyper*

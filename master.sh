@@ -9,7 +9,7 @@ PRIVATE_PORT="5000"
 # extra volume for registry
 HOSTDIR="/mnt"
 USER="emma"
-K8S_VERSION=1.0.0
+K8S_VERSION=1.0.1
 #DOCKER_VERSION=1.7.1
 REPO=dalanlan
 url='https://get.docker.com/'
@@ -186,16 +186,16 @@ install_docker() {
 			exit 1
 	esac
 
-	# setup the docker bootstrap daemon too
-	sudo -b docker -d -H unix:///var/run/docker-bootstrap.sock -p /var/run/docker-bootstrap.pid --iptables=false --ip-masq=false --bridge=none --graph=/var/lib/docker-bootstrap 2> /var/log/docker-bootstrap.log 1> /dev/null
-	#ps -ef | grep docker 
-	sleep 5
-	 sudo docker -H unix:///var/run/docker-bootstrap.sock load -i ./tarpackage/f.tar  #flannel
-	 sudo docker -H unix:///var/run/docker-bootstrap.sock load -i ./tarpackage/e.tar  #etcd
-	 sudo docker load -i ./tarpackage/hyper.tar #hyperkube 
-	 sudo docker load -i ./tarpackage/r.tar #registry
-	 sudo docker load -i ./tarpackage/p.tar #pase
-	 sudo docker load -i ./tarpackage/g.tar #gorouter
+	# # setup the docker bootstrap daemon too
+	# sudo -b docker -d -H unix:///var/run/docker-bootstrap.sock -p /var/run/docker-bootstrap.pid --iptables=false --ip-masq=false --bridge=none --graph=/var/lib/docker-bootstrap 2> /var/log/docker-bootstrap.log 1> /dev/null
+	# #ps -ef | grep docker 
+	# sleep 5
+	#  sudo docker -H unix:///var/run/docker-bootstrap.sock load -i ./tarpackage/f.tar  #flannel
+	#  sudo docker -H unix:///var/run/docker-bootstrap.sock load -i ./tarpackage/e.tar  #etcd
+	#  sudo docker load -i ./tarpackage/hyper.tar #hyperkube 
+	#  sudo docker load -i ./tarpackage/r.tar #registry
+	#  sudo docker load -i ./tarpackage/p.tar #pase
+	#  sudo docker load -i ./tarpackage/g.tar #gorouter
 }
 
 start_k8s(){
@@ -240,7 +240,7 @@ start_k8s(){
     install_gorouter
 
 	# Start Master components
-	docker run --net=host -d --privileged -v /var/run/docker.sock:/var/run/docker.sock  ${REPO}/hyperkube:v${K8S_VERSION} /hyperkube kubelet --api-servers=https://127.0.0.1:6443 --v=2 --enable-server --config=/etc/kubernetes/manifests-multi --hostname-override=127.0.0.1 --cluster-dns=192.168.3.10 --cluster-domain=cluster.local --kubeconfig=/srv/kubernetes/config
+	docker run --net=host -d --privileged -v /sys:/sys:ro -v /var/run/docker.sock:/var/run/docker.sock  ${REPO}/hyperkube:v${K8S_VERSION} /hyperkube kubelet --api-servers=https://127.0.0.1:6443 --v=2 --enable-server --config=/etc/kubernetes/manifests-multi --hostname-override=127.0.0.1 --cluster-dns=192.168.3.10 --cluster-domain=cluster.local --kubeconfig=/srv/kubernetes/config
     docker run -d --net=host --privileged ${REPO}/hyperkube:v${K8S_VERSION} /hyperkube proxy --master=https://127.0.0.1:6443 --v=2 --kubeconfig=/srv/kubernetes/config  
 }
 
@@ -262,6 +262,6 @@ echo "Installing docker"
 install_docker
 echo "Done !"
 
-echo "Installing master"
-start_k8s
-echo "Done"
+# echo "Installing master"
+# start_k8s
+# echo "Done"

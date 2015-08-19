@@ -40,7 +40,7 @@ spec:
         - name: etcd-storage
           mountPath: /var/etcd/data
       - name: kube2sky
-        image: dalanlan/kube2sky:1.11
+        image: 10.10.103.215:5000/kube2sky:1.11
         resources:
           limits:
             cpu: 100m
@@ -49,9 +49,9 @@ spec:
         # command = "/kube2sky"
         - -domain=cluster.local
         - -kubecfg_file=/srv/kubernetes/config
-        # volumeMounts:
-        # - name: kube-config
-        #   mountPath: /srv/kubernetes
+        volumeMounts:
+        - name: kube-config
+          mountPath: /srv/kubernetes
       - name: skydns
         image: 10.10.103.215:5000/skydns:2015-03-11-001
         resources:
@@ -92,7 +92,7 @@ spec:
       volumes:
       - name: etcd-storage
         emptyDir: {}
-      # - name: kube-config
-      #   hostPath: 
-      #     path: /srv/kubernetes
+      - name: kube-config
+        hostPath: 
+          path: /srv/kubernetes
       dnsPolicy: Default  # Don't use cluster DNS.

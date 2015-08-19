@@ -223,7 +223,7 @@ var ApmRcConfig = `{
                 "containers": [
                     {
                         "name": "apm",
-                        "image": "liuyang/apm-dc-master:v1",
+                        "image": "liuyang/apm-dc-master:v13",
                         "ports": [
                             {
                                 "containerPort": 6669,
@@ -288,7 +288,7 @@ func main() {
 	MASTER := "10.10.102.97"
 
 	pool := x509.NewCertPool()
-	caCertPath := "/srv/kubernetes/ca.crt"
+	caCertPath := "/home/emma/ssl/ca.crt"
 
 	caCrt, err := ioutil.ReadFile(caCertPath)
 	if err != nil {
@@ -297,7 +297,7 @@ func main() {
 	}
 	pool.AppendCertsFromPEM(caCrt)
 
-	cliCrt, err := tls.LoadX509KeyPair("/srv/kubernetes/kubecfg.crt", "/srv/kubernetes/kubecfg.key")
+	cliCrt, err := tls.LoadX509KeyPair("/home/emma/ssl/kubecfg.crt", "/home/emma/ssl/kubecfg.key")
 	if err != nil {
 		fmt.Println("Loadx509keypair err:", err)
 		return
@@ -312,7 +312,7 @@ func main() {
 	client := &http.Client{Transport: tr}
 
 	//create DNS rn and DNS service
-	request, err := http.NewRequest("POST", "https://"+MASTER+":6443/api/v1/namespaces/kube-system/replicationcontrollers", strings.NewReader(DnsRcConfig))
+	/*request, err := http.NewRequest("POST", "https://"+MASTER+":6443/api/v1/namespaces/kube-system/replicationcontrollers", strings.NewReader(DnsRcConfig))
 	dnsrcresp, err := client.Do(request)
 	if err != nil {
 		fmt.Println("new dns rc error:", err)
@@ -330,20 +330,22 @@ func main() {
 	}
 	defer dnsseresp.Body.Close()
 	body, err = ioutil.ReadAll(dnsseresp.Body)
-	fmt.Println(string(body))
+	fmt.Println(string(body))*/
 
 	//create apm-dc rc and se
-	/*request, err = http.NewRequest("POST", "http://"+MASTER+":8080/api/v1beta3/namespaces/default/replicationcontrollers", strings.NewReader(ApmRcConfig))
+	//request, err := http.NewRequest("POST", "https://"+MASTER+":6443/api/v1/namespaces/default/replicationcontrollers", strings.NewReader(ApmRcConfig))
+	request, err := http.NewRequest("GET", "https://"+MASTER+":6443/ui", strings.NewReader(ApmRcConfig))
+
 	rcresp, err := client.Do(request)
 	if err != nil {
 		fmt.Println("new apm rc error:", err)
 		return
 	}
 	defer rcresp.Body.Close()
-	body, err = ioutil.ReadAll(rcresp.Body)
+	body, err := ioutil.ReadAll(rcresp.Body)
 	fmt.Println(string(body))
 
-	request, err = http.NewRequest("POST", "http://"+MASTER+":8080/api/v1beta3/namespaces/default/services", strings.NewReader(ApmSeConfig))
+	/*request, err = http.NewRequest("POST", "https://"+MASTER+":6443/api/v1/namespaces/default/services", strings.NewReader(ApmSeConfig))
 	seresp, err := client.Do(request)
 	if err != nil {
 		fmt.Println("new apm se error:", err)
